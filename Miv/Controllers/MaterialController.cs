@@ -23,8 +23,8 @@ namespace Miv.Controllers
         public async Task<IActionResult> Index()
         {
             var data = _context.Materials
-                                    .Include(mat => mat.Attachings)
-                                    .ThenInclude(att => att.Content)
+                                    .Include(mat => mat.Children)
+                                    .ThenInclude(att => att.Child)
                                     .AsNoTracking()
                                     .ToListAsync();
             return View(await data);
@@ -39,7 +39,7 @@ namespace Miv.Controllers
             }
 
             var material = await _context.Materials
-                .FirstOrDefaultAsync(m => m.ID == id);
+                                         .FirstOrDefaultAsync(m => m.MaterialID == id);
 
             if (material == null)
             {
@@ -94,7 +94,7 @@ namespace Miv.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,imgUrl")] Material material)
         {
-            if (id != material.ID)
+            if (id != material.MaterialID)
             {
                 return NotFound();
             }
@@ -108,7 +108,7 @@ namespace Miv.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MaterialExists(material.ID))
+                    if (!MaterialExists(material.MaterialID))
                     {
                         return NotFound();
                     }
@@ -131,7 +131,7 @@ namespace Miv.Controllers
             }
 
             var material = await _context.Materials
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.MaterialID == id);
             if (material == null)
             {
                 return NotFound();
@@ -153,7 +153,7 @@ namespace Miv.Controllers
 
         private bool MaterialExists(int id)
         {
-            return _context.Materials.Any(e => e.ID == id);
+            return _context.Materials.Any(e => e.MaterialID == id);
         }
     }
 }

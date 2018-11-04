@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.imgUrl)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Attachings)
+                @Html.DisplayNameFor(model => model.Children)
             </th>
             <th></th>
         </tr>
@@ -43,19 +43,19 @@
                 </td>
                 <td>
                     <ul>
-                        @foreach (var attaching in item.Attachings)
+                        @foreach (var parentChildRelation in item.Children)
                         {
-                            <li>@attaching.Content.ContentID</li>
-                            <li>@attaching.Content.Name</li>
-                            <li>@attaching.Content.Description</li>
+                        <li>@parentChildRelation.Child.MaterialID</li>
+                        <li>@parentChildRelation.Child.Name</li>
+                        <li>@parentChildRelation.Child.Description</li>
 
                         }
                     </ul>
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.MaterialID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.MaterialID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MaterialID">Delete</a>
                 </td>
             </tr>
         }
