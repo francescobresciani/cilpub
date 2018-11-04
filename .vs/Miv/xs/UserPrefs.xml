@@ -1,5 +1,9 @@
 ﻿<Properties StartupConfiguration="{A6FCCB01-D79B-4B21-989C-4162505FD043}|Default">
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Miv/Data/DbInitializer.cs">
+    <Files>
+      <File FileName="Miv/Data/DbInitializer.cs" Line="27" Column="60" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.Miv PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

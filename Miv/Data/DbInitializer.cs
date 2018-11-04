@@ -21,13 +21,13 @@ namespace Miv.Data
             //materials
             var materials = new Material[]
             {
-                new Material{MaterialID=1,Name="mat01",Description="sdafwefwf",imgUrl="./mat.jpg"},
-                new Material{MaterialID=2,Name="mat02",Description="dfdff",imgUrl="./mat.jpg"},
-                new Material{MaterialID=3,Name="mat03",Description="sdafweqwwewefwf",imgUrl="./mat.jpg"},
-                new Material{MaterialID=10,Name="mat04",Description="qweqwe",imgUrl="./mat.jpg"},
-                new Material{MaterialID=11,Name="mat05",Description="sddbafwefwf",imgUrl="./mat.jpg"},
-                new Material{MaterialID=12,Name="mat05",Description="sddbafwefwf",imgUrl="./mat.jpg"},
-                new Material{MaterialID=21,Name="mat05",Description="sddbafwefwf",imgUrl="./mat.jpg"}
+                new Material{MaterialID=1,Name="parent 1",Description="i have 3 children",imgUrl="./01.jpg"},
+                new Material{MaterialID=2,Name="parent 2",Description="i have 2 children",imgUrl="./02.jpg"},
+                new Material{MaterialID=3,Name="parent 3",Description="i have no children",imgUrl="./03.jpg"},
+                new Material{MaterialID=10,Name="1st child of 1",Description="qweqwe",imgUrl="./04.jpg"},
+                new Material{MaterialID=11,Name="2nd child of 1",Description="sddbafwefwf",imgUrl="./05.jpg"},
+                new Material{MaterialID=12,Name="3rd child of 1",Description="sddbafwefwf",imgUrl="./06.jpg"},
+                new Material{MaterialID=21,Name="only child of 2",Description="sddbafwefwf",imgUrl="./07.jpg"}
             };
             foreach (Material m in materials)
             {
