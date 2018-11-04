@@ -63,10 +63,14 @@
 </table>
 
 
+<link href="~/datatables/datatables.css" rel="stylesheet" />
+
+
+@section  Scripts{
+<script src="~/datatables/datatables.min.js"></script>
 <script>
-    var $ = require('jquery');
-    var dt = require('datatables.net')(windows,$);
-    $(document).ready( function() {
+    $(document).ready(function (){
         $('#main-table').DataTable();
     });
 </script>
+}
