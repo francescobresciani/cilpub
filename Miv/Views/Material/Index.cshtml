@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table id="main-table" class="table">
     <thead>
         <tr>
             <th>
@@ -61,3 +61,12 @@
         }
     </tbody>
 </table>
+
+
+<script>
+    var $ = require('jquery');
+    var dt = require('datatables.net')(windows,$);
+    $(document).ready( function() {
+        $('#main-table').DataTable();
+    });
+</script>

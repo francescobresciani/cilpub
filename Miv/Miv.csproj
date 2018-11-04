@@ -9,4 +9,7 @@
 <!--<DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />-->
 <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
+<ItemGroup>
+  <Content Remove="Views\Attaching\Create.cshtml" />
+</ItemGroup>
 </Project>
