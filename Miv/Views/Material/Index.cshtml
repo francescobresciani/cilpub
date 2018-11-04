@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table id="tabMaterial" class="table">
     <thead>
         <tr>
             <th>
@@ -24,40 +24,76 @@
             <th>
                 @Html.DisplayNameFor(model => model.Attachings)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
 
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.imgUrl)
-                </td>
-                <td>
-                    <ul>
-                        @foreach (var attaching in item.Attachings)
-                        {
-                            <li>@attaching.Content.ContentID</li>
-                            <li>@attaching.Content.Name</li>
-                            <li>@attaching.Content.Description</li>
+        <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.imgUrl)
+        </td>
+        <td>
+            <table id="childsplay" class="table">
+                <thead>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                </thead>
+                <tbody>
+                    @foreach (var attaching in item.Attachings)
+                    {
+                        <tr>
+                            <td>@attaching.Content.ContentID</td>
+                            <td>@attaching.Content.Name</td>
+                            <td>@attaching.Content.Description</td>
+                        </tr>}
+                </tbody>
+            </table>
+        </td>
 
-                        }
-                    </ul>
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
+        </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+
+@*Loading Datatables to the page*@
+<link href="~/datatables/datatables.css" rel="stylesheet" />
+@*Loading the Datables js*@
+@section Scripts{
+
+    <script src="~/datatables/datatables.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#tabMaterial').DataTable({
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 'tr'
+                    }
+                },
+                columnDefs: [{
+                    className: 'control',
+                    orderable: false,
+                    targets: -2
+                }],
+                order: [1, 'asc']
+            } );
+        });
+    </script>
+}
