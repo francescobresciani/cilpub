@@ -1,7 +1,12 @@
 ﻿<Properties StartupConfiguration="{A6FCCB01-D79B-4B21-989C-4162505FD043}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Miv/Data/DbInitializer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Miv/Controllers/MaterialController.cs">
     <Files>
-      <File FileName="Miv/Data/DbInitializer.cs" Line="27" Column="60" />
+      <File FileName="Miv/Models/Material.cs" Line="13" Column="46" />
+      <File FileName="Miv/Models/ParentChild.cs" Line="17" Column="28" />
+      <File FileName="Miv/Program.cs" Line="1" Column="1" />
+      <File FileName="Miv/Data/MivContext.cs" Line="9" Column="80" />
+      <File FileName="Miv/Views/Material/Index.cshtml" Line="1" Column="39" />
+      <File FileName="Miv/Controllers/MaterialController.cs" Line="30" Column="24" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
