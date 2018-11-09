@@ -9,69 +9,77 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table id="tabMaterial" class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.imgUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Attachings)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
 
-        <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.imgUrl)
-        </td>
-        <td>
-            <table id="childsplay" class="table">
-                <thead>
+<div class="table-div">
+
+    <table id="tabMaterial" class="table">
+        <thead>
+            <tr>
                 <th>
-                    ID
+                    @Html.DisplayNameFor(model => model.ID)
                 </th>
                 <th>
-                    Name
+                    @Html.DisplayNameFor(model => model.Name)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Description)
                 </th>
-                </thead>
-                <tbody>
-                    @foreach (var attaching in item.Attachings)
-                    {
-                        <tr>
-                            <td>@attaching.Content.ContentID</td>
-                            <td>@attaching.Content.Name</td>
-                            <td>@attaching.Content.Description</td>
-                        </tr>}
-                </tbody>
-            </table>
-        </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.imgUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Attachings)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        <img src=@Html.DisplayFor(modelItem => item.imgUrl) width="100" height="25" alt=@Html.DisplayFor(modelItem => item.imgUrl) />
+                    </td>
+                    <td>
+                        <table id="childsplay" class="table">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model.ID)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var attaching in item.Attachings)
+                                {
+                                    <tr>
+                                        <td>@attaching.Content.ContentID</td>
+                                        <td>@attaching.Content.Name</td>
+                                        <td>@attaching.Content.Description</td>
+                                    </tr>}
+                            </tbody>
+                        </table>
+                    </td>
 
-        </tr>
-        }
+                </tr>
+            }
         </tbody>
     </table>
 
+</div>
+<div class="view-image"></div>
+
 
 @*Loading Datatables to the page*@
+<link href="~/css/material.css" rel="stylesheet" />
 <link href="~/datatables/datatables.css" rel="stylesheet" />
 @*Loading the Datables js*@
 @section Scripts{
@@ -88,12 +96,27 @@
                     }
                 },
                 columnDefs: [{
-                    className: 'control',
+                    //className: 'control',
                     orderable: false,
                     targets: -2
                 }],
                 order: [1, 'asc']
-            } );
+            });
+           
         });
+
+//        var table = $('#tabMaterial').DataTable();
+
+//        $('#tabMaterial tbody').on('click', 'tr', function () {
+
+////            console.log(table.row(this).data());
+//            //var log = table.row(this).data([]);
+//            //console.log(log);
+//            var idx = table.row(this).data();
+//            console.log(data);
+
+//        });
+
+
     </script>
 }

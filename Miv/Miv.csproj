@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Views\Material\test.cshtml" />
+    <Content Remove="wwwroot\css\Class.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />
