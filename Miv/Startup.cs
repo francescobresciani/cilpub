@@ -36,8 +36,10 @@ namespace Miv
 
             services.AddMvc();
 
+
             services.AddDbContext<MivContext>(options =>
-                  options.UseSqlite("Data Source=MivContext.db"));
+
+                 options.UseSqlite("Data Source=MivContext.db"));
 
 
 
@@ -64,7 +66,7 @@ namespace Miv
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Material}/{action=Index}/{id?}");
+                    template: "{controller=Material}/{action=ShowGrid}/{id?}");
             });
         }
     }

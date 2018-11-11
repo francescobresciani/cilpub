@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Miv.Data;
 using Miv.Models;
 
+
+
 namespace Miv.Controllers
 {
     public class MaterialController : Controller
@@ -20,140 +22,81 @@ namespace Miv.Controllers
         }
 
         // GET: Material
-        public async Task<IActionResult> Index()
+        public IActionResult ShowGrid()
         {
-            var data = _context.Materials
-                                    .Include(mat => mat.Children)
-                                    .ThenInclude(att => att.Child)
-                                    .AsNoTracking()
-                                    .ToListAsync();
-            return View(await data);
+          return View();
         }
 
-        // GET: Material/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var material = await _context.Materials
-                                         .FirstOrDefaultAsync(m => m.MaterialID == id);
-
-            if (material == null)
-            {
-                return NotFound();
-            }
-
-            return View(material);
+        // DELETE: Material 
+        public void Delete(int id){
+            Console.Out.Write("deleted" + id);
         }
 
-        // GET: Material/Create
-        public IActionResult Create()
+
+
+
+        //LoadData
+        public IActionResult LoadData()
         {
-            return View();
-        }
-
-        // POST: Material/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Description,imgUrl")] Material material)
-        {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(material);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(material);
-        }
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
 
-        // GET: Material/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+                // Skip number of Rows count  
+                var start = Request.Form["start"].FirstOrDefault();
 
-            var material = await _context.Materials.FindAsync(id);
-            if (material == null)
-            {
-                return NotFound();
-            }
-            return View(material);
-        }
+                // Paging Length 10,20  
+                var length = Request.Form["length"].FirstOrDefault();
 
-        // POST: Material/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,imgUrl")] Material material)
-        {
-            if (id != material.MaterialID)
-            {
-                return NotFound();
-            }
+                // Sort Column Name  
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
 
-            if (ModelState.IsValid)
-            {
-                try
+                // Sort Column Direction (asc, desc)  
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+
+                // Search Value from (Search box)  
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+
+                //Paging Size (10, 20, 50,100)  
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                int recordsTotal = 0;
+
+                // getting all Customer data  
+                var materialData = (from material in _context.Materials
+                                    select material);
+                //Sorting  
+                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
-                    _context.Update(material);
-                    await _context.SaveChangesAsync();
+                    //materialData = materialData.OrderBy(sortColumn + " " + sortColumnDirection);
+
+
                 }
-                catch (DbUpdateConcurrencyException)
+                //Search  
+                if (!string.IsNullOrEmpty(searchValue))
                 {
-                    if (!MaterialExists(material.MaterialID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    materialData = materialData.Where(m => m.Name == searchValue);
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(material);
-        }
 
-        // GET: Material/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
+                //total number of rows counts   
+                recordsTotal = materialData.Count();
+                //Paging   
+                var data = materialData.Skip(skip).Take(pageSize).ToList();
+                //Returning Json Data  
+                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+
+            }
+            catch (Exception)
             {
-                return NotFound();
+                throw;
             }
 
-            var material = await _context.Materials
-                .FirstOrDefaultAsync(m => m.MaterialID == id);
-            if (material == null)
-            {
-                return NotFound();
-            }
-
-            return View(material);
         }
 
-        // POST: Material/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var material = await _context.Materials.FindAsync(id);
-            _context.Materials.Remove(material);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
-        private bool MaterialExists(int id)
-        {
-            return _context.Materials.Any(e => e.MaterialID == id);
-        }
+
     }
 }

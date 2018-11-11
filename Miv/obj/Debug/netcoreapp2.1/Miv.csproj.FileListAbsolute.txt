@@ -82,3 +82,4 @@
 /Users/frab/Projects/cilpub/Miv/bin/Debug/netcoreapp2.1/Miv.Views.pdb
 /Users/frab/Projects/cilpub/Miv/obj/Debug/netcoreapp2.1/Miv.Views.pdb
 /Users/frab/Projects/cilpub/Miv/obj/Debug/netcoreapp2.1/Miv.csproj.CopyComplete
+/Users/frab/Projects/cilpub/Miv/obj/Debug/netcoreapp2.1/Razor/Views/Material/ShowGrid.g.cshtml.cs
