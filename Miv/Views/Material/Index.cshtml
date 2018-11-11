@@ -27,9 +27,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.imgUrl)
                 </th>
-                <th>
+                @*<th>
                     @Html.DisplayNameFor(model => model.Attachings)
-                </th>
+                </th>*@
             </tr>
         </thead>
         <tbody>
@@ -46,9 +46,9 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        <img src=@Html.DisplayFor(modelItem => item.imgUrl) width="100" height="25" alt=@Html.DisplayFor(modelItem => item.imgUrl) />
+                        @Html.DisplayFor(modelItem => item.imgUrl)
                     </td>
-                    <td>
+                    @*<td>
                         <table id="childsplay" class="table">
                             <thead>
                                 <tr>
@@ -67,7 +67,7 @@
                                     </tr>}
                             </tbody>
                         </table>
-                    </td>
+                    </td>*@
 
                 </tr>
             }
@@ -75,7 +75,7 @@
     </table>
 
 </div>
-<div class="view-image"></div>
+<div id="view-image" class="view-image"></div>
 
 
 @*Loading Datatables to the page*@
@@ -87,23 +87,49 @@
     <script src="~/datatables/datatables.min.js"></script>
     <script>
 
-        $(document).ready(function () {
-            $('#tabMaterial').DataTable({
-                responsive: {
-                    details: {
-                        type: 'column',
-                        target: 'tr'
-                    }
-                },
-                columnDefs: [{
-                    //className: 'control',
-                    orderable: false,
-                    targets: -2
-                }],
-                order: [1, 'asc']
+        let table = $('#tabMaterial').DataTable();
+
+        let data, img = document.createElement("IMG");;
+        
+
+        function showImage(url, target) {
+            img.src = url;
+           // document.getElementById(target).removeChild(img);
+            document.getElementById(target).appendChild(img);
+        }
+
+
+//        $(document).ready(console.log(data));
+
+
+        $('#tabMaterial tbody').on('click', 'tr', function () {
+            let row = table.row(this).data()
+                
+            url = row[3];
+            console.log('url '+url);
+            showImage(url,'view-image');
+                // note - call draw() to update the table's draw state with the new data
             });
+
+
+
+        //$(document).ready(function () {
+        //    $('#tabMaterial').DataTable({
+        //        responsive: {
+        //            details: {
+        //                type: 'column',
+        //                target: 'tr'
+        //            }
+        //        },
+        //        columnDefs: [{
+        //            //className: 'control',
+        //            orderable: false,
+        //            targets: -2
+        //        }],
+        //        order: [1, 'asc']
+        //    });
            
-        });
+        //});
 
 //        var table = $('#tabMaterial').DataTable();
 
