@@ -78,7 +78,7 @@ namespace Miv.Controllers
                 //Search  
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    materialData = materialData.Where(m => m.Name == searchValue);
+                    materialData = materialData.Where(m => (m.MaterialID).ToString().Contains(searchValue)|| m.Name.Contains(searchValue));
                 }
 
                 //total number of rows counts   

@@ -1,5 +1,10 @@
 ﻿<Properties StartupConfiguration="{A6FCCB01-D79B-4B21-989C-4162505FD043}|Default">
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Miv/Controllers/MaterialController.cs">
+    <Files>
+      <File FileName="Miv/Views/Material/ShowGrid.cshtml" Line="52" Column="6" />
+      <File FileName="Miv/Controllers/MaterialController.cs" Line="81" Column="72" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.Miv PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

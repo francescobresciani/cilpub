@@ -34,17 +34,26 @@
 
 
 <script>
-   
 $(document).ready(function ()
 {
     const diva = document.getElementById("view-image");
     const img = document.createElement("IMG");
 
 
+    function showImageAndChildren(url, target){
+        showImage(url, target);
+        showChildren();
+    }
+
     function showImage(url, target) {
         img.src = url
         target.appendChild(img);
         target.autoWidth;
+    }
+
+    function showChildren(){
+        console.log("showing children");    
+
     }
 
 
@@ -74,13 +83,11 @@ $(document).ready(function ()
     $('#prova tbody').on('click', 'tr', function () {
 
         var riga = table.row(this).data();
-        showImage(riga.imgUrl, diva);
+        showImageAndChildren(riga.imgUrl, diva);
 
     });
 
-});
-
-</script>
+});</script>
 
 
 
