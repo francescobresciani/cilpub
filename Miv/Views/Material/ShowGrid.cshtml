@@ -34,9 +34,21 @@
 
 
 <script>
+   
 $(document).ready(function ()
 {
-    let varia = $('#prova').DataTable({
+    const diva = document.getElementById("view-image");
+    const img = document.createElement("IMG");
+
+
+    function showImage(url, target) {
+        img.src = url
+        target.appendChild(img);
+        target.autoWidth;
+    }
+
+
+    var table = $('#prova').DataTable({
         "processing": true, // for show progress bar
         "serverSide": true, // for process server side
         "filter": true, // this is for disable filter (search box)
@@ -51,66 +63,22 @@ $(document).ready(function ()
             { "data": "materialID", "name": "materialID", "autoWidth": true },
             { "data": "name", "name": "name", "autoWidth": true },
             { "data": "description", "name": "description", "autoWidth": true },
-            { "data": "imgUrl", "name": "imgUrl", "autoWidth": true}
+            { "data": "imgUrl", "autoWidth": true }
 
         ]
+
     });
 
-    funkTown(varia.row);
+
+
+    $('#prova tbody').on('click', 'tr', function () {
+
+        var riga = table.row(this).data();
+        showImage(riga.imgUrl, diva);
+
+    });
 
 });
-
-
-    function funkTown(riga) {
-        console.log('hello, bitches',riga);
-
-    }
-
-
-    //let table = $('#prova').DataTable({
-    //    "bRetrieve": true
-    //});
-
-    //$('#prova tbody').on('click', 'tr', function () {
-    //    let row = table.row(this).data()
-
-    //    url = row[3];
-    //    console.log('url ' + row);
-    //    //        showImage(url, 'view-image');
-
-    //});
-
-
-@*function DeleteData(MaterialID)
-{
-    if (confirm("Are you sure you want to delete ...?"))
-    {
-        Delete(MaterialID);
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
-function Delete(MaterialID)
-{
-    var url = '@Url.Content("~/")' + "Material/Delete";
-
-    $.post(url, { ID: MaterialID }, function (data)
-    {
-        if (data)
-        {
-            oTable = $('#material').DataTable();
-            oTable.draw();
-        }
-        else
-        {
-            alert("Something Went Wrong!");
-        }
-    });
-}*@
 
 </script>
 
