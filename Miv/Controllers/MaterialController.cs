@@ -97,6 +97,14 @@ namespace Miv.Controllers
         }
 
 
+        public IActionResult LoadImage()
+        {
+
+            return base.File("images/mobydick.png","image/png");
+        }
+
+
+      
 
     }
 }

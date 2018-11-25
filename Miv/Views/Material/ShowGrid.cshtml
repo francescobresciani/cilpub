@@ -25,7 +25,9 @@
         </table>
     </div>
 </div>
-<div id="view-image" class="view-image"></div>
+<div id="view-image" class="view-image">
+    <img id="image-preview" src=path />
+</div>
 
 
 @*Loading Datatables to the page*@
@@ -36,26 +38,6 @@
 <script>
 $(document).ready(function ()
 {
-    const diva = document.getElementById("view-image");
-    const img = document.createElement("IMG");
-
-
-    function showImageAndChildren(url, target){
-        showImage(url, target);
-        showChildren();
-    }
-
-    function showImage(url, target) {
-        img.src = url
-        target.appendChild(img);
-        target.autoWidth;
-    }
-
-    function showChildren(){
-        console.log("showing children");    
-
-    }
-
 
     var table = $('#prova').DataTable({
         "processing": true, // for show progress bar
@@ -82,8 +64,26 @@ $(document).ready(function ()
 
     $('#prova tbody').on('click', 'tr', function () {
 
-        var riga = table.row(this).data();
-        showImageAndChildren(riga.imgUrl, diva);
+        @*var path = table.row(this).data().imgUrl;*@
+        @*var localstorage = Window.localStorage;*@
+
+        $.ajax({
+            url:"Material/LoadImage",
+            contentType: "image/png",
+            success:function(img)
+            {
+                @*console.log(img);*@
+                @*localStorage.setItem("immagine", img);*@
+                $('#view-image').html('<img src="data:image/png;base64,' + img + '" />');
+
+
+
+
+
+            }
+        });
+
+
 
     });
 
