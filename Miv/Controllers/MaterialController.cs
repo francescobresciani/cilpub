@@ -96,6 +96,22 @@ namespace Miv.Controllers
 
         }
 
+        //LoadChildren
+        [HttpPost]
+        public IActionResult LoadChild(int parMaterialId)
+        {
+            // getting the Children data
+            //var materialChildren = (from material in _context.ParentChild
+            //               select material.ParentID==parMaterialId);
+
+            var materialChildren = _context.Materials.Where(m => m.Parents.Any(p => p.ParentID == parMaterialId));
+
+            //var materialChildren = _context.ParentChild.Where(p => p.ParentID == parMaterialId).Select(p => p.)
+            //Returning Json Data  
+            return Json(materialChildren);
+
+        }
+
 
 
     }

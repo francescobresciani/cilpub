@@ -52,3 +52,14 @@ body {
     height: 50%;
     border: 3px solid #000;
 }
+
+td.details-control {
+    text-align: center;
+    color: forestgreen;
+    cursor: pointer;
+}
+
+tr.shown td.details-control {
+    text-align: center;
+    color: red;
+}

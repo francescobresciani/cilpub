@@ -19,12 +19,13 @@
                     <th>MaterialID</th>
                     <th>Name</th>
                     <th>Description</th>
-                    <th>imgUrl</th>
+                    <th>Children</th>
                 </tr>
             </thead>
         </table>
     </div>
 </div>
+
 <div id="view-image" class="view-image"></div>
 
 
@@ -34,60 +35,143 @@
 
 
 <script>
-$(document).ready(function ()
-{
-    const diva = document.getElementById("view-image");
-    const img = document.createElement("IMG");
+    $(document).ready(function () {
+        const diva = document.getElementById("view-image");
+        const img = document.createElement("IMG");
 
 
-    function showImageAndChildren(url, target){
-        showImage(url, target);
-        showChildren();
-    }
+        function showImageAndChildren(url, target) {
+            showImage(url, target);
+            //  showChildren();
+        }
 
-    function showImage(url, target) {
-        img.src = url
-        target.appendChild(img);
-        target.autoWidth;
-    }
+        function showImage(url, target) {
+            img.src = url;
+            target.appendChild(img);
+            img.setAttribute("style", "width:100%");
+            img.setAttribute("style", "height:100%");
+            target.autoWidth;
+        }
 
-    function showChildren(){
-        console.log("showing children");    
+        /* function showChildren(){
+             console.log("showing children");
 
-    }
+         }
+
+         /* Formatting function for row details - modify as you need */
+        function format(d) {
+            // `d` is the original data object for the row
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Full name:</td>' +
+                '<td>' + d.materialID + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Extension number:</td>' +
+                '<td>' + d.name + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Extra info:</td>' +
+                '<td>And any further details here (images etc)...</td>' +
+                '</tr>' +
+                '</table>';
+        }
+
+        var original = $('#prova');
+
+        var table = original.DataTable({
+            "processing": true, // for show progress bar
+            "serverSide": true, // for process server side
+            "filter": true, // this is for disable filter (search box)
+            "orderMulti": false, // for disable multiple column at once
+            "ajax": {
+                "url": "Material/LoadData",
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columns": [
+
+                { "data": "materialID", "name": "materialID", "autoWidth": true },
+                { "data": "name", "name": "name", "autoWidth": true },
+                { "data": "description", "name": "description", "autoWidth": true }
+                //   { "data": "imgUrl", "autoWidth": true }
+                //   { "data": "children", "name":"children"}
+
+            ]
+
+        });
+
+        $('#prova tbody').on('click', 'tr', function () {
+
+            var riga = table.row(this);
+
+            let rowId = riga.data().materialID;
+
+            let tableChildren = $.ajax({
+
+                url: "/Material/LoadChild",
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                    parMaterialId: rowId,
+                },
+                success: function (result) {
+                    console.log(result);
+                    $("#table-div").empty();
+                    result.forEach(function (element) {
+                        console.log(element);
+
+                        $("#table-div").append("<option>" + element.LocationName + "</option>");
+                    });
+                },
+                error: function () {
+                    $("#table-div").empty();
+                }
+
+            });
+
+            if (riga.child.isShown()) {
+                // This row is already open - close it
+                riga.child.hide();
+            
+                //tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                riga.child(tableChildren).show();
+                //riga.child(format(row.data())).show();
+                //tr.addClass('shown');
+            }
 
 
-    var table = $('#prova').DataTable({
-        "processing": true, // for show progress bar
-        "serverSide": true, // for process server side
-        "filter": true, // this is for disable filter (search box)
-        "orderMulti": false, // for disable multiple column at once
-        "ajax": {
-            "url": "Material/LoadData",
-            "type": "POST",
-            "datatype": "json"
-        },
-        "columns": [
 
-            { "data": "materialID", "name": "materialID", "autoWidth": true },
-            { "data": "name", "name": "name", "autoWidth": true },
-            { "data": "description", "name": "description", "autoWidth": true },
-            { "data": "imgUrl", "autoWidth": true }
+           
 
-        ]
-
-    });
+            //rowing = tableChildren[0];
 
 
+//            console.log('table2 ' + tableChildren);
+            
+            //    riga.child(tableChildren.rows().data).show());
 
-    $('#prova tbody').on('click', 'tr', function () {
+            // Add event listener for opening and closing details
+            /*    $('#example tbody').on('click', 'td.details-control', function () {
+                    var tr = $(this).closest('tr');
+                    var row = table.row(tr);
 
-        var riga = table.row(this).data();
-        showImageAndChildren(riga.imgUrl, diva);
+                    if (row.child.isShown()) {
+                        // This row is already open - close it
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        // Open this row
+                        row.child(format(row.data())).show();
+                        tr.addClass('shown');
+                    }
+                });
+                */
 
-    });
+        });
 
-});</script>
-
-
-
+    });</script>
