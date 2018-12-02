@@ -26,7 +26,7 @@
     </div>
 </div>
 <div id="view-image" class="view-image">
-    <img id="image-preview" src=path />
+    <img id="image-preview" src="" />
 </div>
 
 
@@ -64,22 +64,21 @@ $(document).ready(function ()
 
     $('#prova tbody').on('click', 'tr', function () {
 
-        @*var path = table.row(this).data().imgUrl;*@
-        @*var localstorage = Window.localStorage;*@
+
+
+        var fileName = table.row(this).data().imgUrl;
+
 
         $.ajax({
             url:"Material/LoadImage",
+            data:{
+                imageName: fileName,
+                
+            },
             contentType: "image/png",
             success:function(img)
             {
-                @*console.log(img);*@
-                @*localStorage.setItem("immagine", img);*@
-                $('#view-image').html('<img src="data:image/png;base64,' + img + '" />');
-
-
-
-
-
+                $('#image-preview').attr('src', img);
             }
         });
 

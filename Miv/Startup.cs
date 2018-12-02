@@ -43,6 +43,10 @@ namespace Miv
 
 
 
+
+         
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,9 +68,16 @@ namespace Miv
 
             app.UseMvc(routes =>
             {
+
+                routes.MapRoute("prova", "Material/LoadImage/{imageName}",
+                   defaults: new { controller = "Material", action = "LoadImage" });
+
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Material}/{action=ShowGrid}/{id?}");
+                    name: "default", 
+                    template: "{controller=Material}/{action=ShowGrid}");
+
+
+
             });
         }
     }

@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Miv.Data;
 using Miv.Models;
-
+using Microsoft.AspNetCore.Hosting;
 
 
 namespace Miv.Controllers
 {
+
     public class MaterialController : Controller
     {
         private readonly MivContext _context;
@@ -24,16 +28,8 @@ namespace Miv.Controllers
         // GET: Material
         public IActionResult ShowGrid()
         {
-          return View();
+            return View();
         }
-
-
-        // DELETE: Material 
-        public void Delete(int id){
-            Console.Out.Write("deleted" + id);
-        }
-
-
 
 
         //LoadData
@@ -78,7 +74,7 @@ namespace Miv.Controllers
                 //Search  
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    materialData = materialData.Where(m => (m.MaterialID).ToString().Contains(searchValue)|| m.Name.Contains(searchValue));
+                    materialData = materialData.Where(m => (m.MaterialID).ToString().Contains(searchValue) || m.Name.Contains(searchValue));
                 }
 
                 //total number of rows counts   
@@ -97,14 +93,34 @@ namespace Miv.Controllers
         }
 
 
-        public IActionResult LoadImage()
-        {
 
-            return base.File("images/mobydick.png","image/png");
-        }
+
+
+     public String LoadImage(String imageName)
+            {
+
+            String path = "wwwroot/" + imageName;
+            byte[] imageByteData = System.IO.File.ReadAllBytes(path);
+            string imreBase64Data = Convert.ToBase64String(imageByteData);
+            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+
+
+            return imgDataURL;
+            }
+
 
 
       
 
+
+
     }
+
+
+
+
+
+
+
 }
+
