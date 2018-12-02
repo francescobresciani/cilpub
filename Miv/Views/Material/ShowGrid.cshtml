@@ -22,11 +22,15 @@
                     <th>Children</th>
                 </tr>
             </thead>
+            <tbody></tbody>
         </table>
     </div>
 </div>
 
 <div id="view-image" class="view-image"></div>
+
+
+
 
 
 @*Loading Datatables to the page*@
@@ -62,18 +66,20 @@
         function format(d) {
             // `d` is the original data object for the row
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<thead>'+
                 '<tr>' +
-                '<td>Full name:</td>' +
+                '<th>Id:</th>' +
+                '<th>Name:</th>' +
+                '<th>Description:</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                '<tr>' +
+                '<td>' + d.materialID + '</td>' +
+                '<td>' + d.name + '</td>' +
                 '<td>' + d.materialID + '</td>' +
                 '</tr>' +
-                '<tr>' +
-                '<td>Extension number:</td>' +
-                '<td>' + d.name + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                '<td>Extra info:</td>' +
-                '<td>And any further details here (images etc)...</td>' +
-                '</tr>' +
+                '</tbody>' +
                 '</table>';
         }
 
@@ -105,7 +111,11 @@
 
             var riga = table.row(this);
 
-            let rowId = riga.data().materialID;
+            let currentParentId = riga.data().materialID;
+
+            var tabella = document.createElement("table");
+
+            var selrow = $(this).closest('tr');
 
             let tableChildren = $.ajax({
 
@@ -113,16 +123,25 @@
                 type: "POST",
                 dataType: "JSON",
                 data: {
-                    parMaterialId: rowId,
+                    parMaterialId: currentParentId,
                 },
                 success: function (result) {
-                    console.log(result);
-                    $("#table-div").empty();
-                    result.forEach(function (element) {
-                        console.log(element);
+                    
 
-                        $("#table-div").append("<option>" + element.LocationName + "</option>");
+                    result.forEach(function (element) {
+                        //                        $("<tr> <td>" + element.materialID + "</td></tr>").insertAfter(selrow);
+                        
+                        $("<tr><td>" + element.materialID + "</td> <td>"+ element.name + "</td></tr>").insertAfter(tabella);
+                        
                     });
+                    
+                  //  $("#table-div").empty();
+ //                   result.forEach(function (element) {
+                   //     console.log(element);
+
+                        //$("#table-div").append("<p>" + element.name + "</p>");
+
+//                    });
                 },
                 error: function () {
                     $("#table-div").empty();
@@ -138,8 +157,10 @@
             }
             else {
                 // Open this row
-                riga.child(tableChildren).show();
-                //riga.child(format(row.data())).show();
+                //riga.child(format(tableChildren)).show();
+          
+                riga.child(tabella).show();
+                //riga.child("hello2").show();
                 //tr.addClass('shown');
             }
 

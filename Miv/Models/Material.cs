@@ -13,5 +13,6 @@ namespace Miv.Models
         public string imgUrl { get; set; }
         public ICollection<ParentChild> Children { get; set; }
         public ICollection<ParentChild> Parents { get; set; }
+     
     }
 }
