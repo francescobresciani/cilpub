@@ -86,7 +86,13 @@
 
             let currentParentId = riga.data()[0];
 
-            console.log("Hello There!!!   " + currentParentId);
+            let index = table.row(this).index();
+
+            console.log("Hello There!!!   " + index);
+
+
+
+//            $("#prova tbody tr").eq(index).after(newRow); 
 
 
             $.ajax({
@@ -95,14 +101,23 @@
                 type: "POST",
                 dataType: "JSON",
                 data: {
-                    parMaterialId: 1,
+                    parMaterialId: currentParentId,
                 },
                 success: function (result) {
                     console.log(result);
                     result.forEach(function (element) {
-                        table.row.add(
+
+                        var newRow = '<tr>' +
+                            '<td>' + element.materialID + '</td> ' +
+                            '<td>' + element.name + '</td>' +
+                            '<td>' + element.description + '</td>' +
+                            '</tr>';
+
+                        $("#prova tbody tr").eq(index).after(newRow); 
+
+/*                        table.row.add(
                             [element.materialID, element.name, element.description]
-                        ).draw();
+                        ).draw();*/
                        // console.log(element);
                     });
                 },
