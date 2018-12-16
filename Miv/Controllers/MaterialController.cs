@@ -33,10 +33,16 @@ namespace Miv.Controllers
             Console.Out.Write("deleted" + id);
         }
 
-
-
+        //InitialData
+        [HttpPost]
+        public IActionResult InitialData(int varCode)
+        {
+            var _material = _context.Materials.Where(m => m.Parents.Any(p => p.ParentID == varCode));
+            return Json(_material);
+        }
 
         //LoadData
+        [HttpPost]
         public IActionResult LoadData()
         {
             try
@@ -94,6 +100,16 @@ namespace Miv.Controllers
                 throw;
             }
 
+        }
+
+        //LoadData2
+        [HttpPost]
+        public IActionResult LoadData2()
+        {
+            var VarMaterial = (from material in _context.Materials
+                            select material);
+
+            return Json(VarMaterial);
         }
 
         //LoadChildren
