@@ -1,8 +1,8 @@
 ﻿<Properties StartupConfiguration="{A6FCCB01-D79B-4B21-989C-4162505FD043}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Miv/Controllers/MaterialController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Miv/Views/Material/ShowGrid.cshtml">
     <Files>
-      <File FileName="Miv/Controllers/MaterialController.cs" Line="102" Column="29" />
-      <File FileName="Miv/Views/Material/ShowGrid.cshtml" Line="76" Column="29" />
+      <File FileName="Miv/Controllers/MaterialController.cs" Line="114" Column="28" />
+      <File FileName="Miv/Views/Material/ShowGrid.cshtml" Line="122" Column="29" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

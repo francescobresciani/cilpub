@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Miv.Data;
 using Miv.Models;
 using Microsoft.AspNetCore.Hosting;
@@ -110,7 +109,25 @@ namespace Miv.Controllers
 
 
 
-      
+
+
+        public ActionResult DownloadImage(String imageName)
+        {
+            String path = "wwwroot/" + imageName;
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+         
+            //il file salvato non è leggibile. controllare codifica
+
+            return File(fileBytes, "image/jpg", imageName);
+
+        }
+
+
+       
+
+
+
+
 
 
 

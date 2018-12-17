@@ -1,7 +1,6 @@
 ﻿@{
     Layout = null;
 }
-
 <!-- scripts and style sheets-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
@@ -20,6 +19,8 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>imgUrl</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
         </table>
@@ -29,14 +30,15 @@
     <img id="image-preview" src="" />
 </div>
 
-
 @*Loading Datatables to the page*@
 <link href="~/css/material.css" rel="stylesheet" />
 <link href="~/datatables/datatables.css" rel="stylesheet" />
 
-
 <script>
-$(document).ready(function ()
+
+
+
+    $(document).ready(function ()
 {
 
     var table = $('#prova').DataTable({
@@ -54,13 +56,25 @@ $(document).ready(function ()
             { "data": "materialID", "name": "materialID", "autoWidth": true },
             { "data": "name", "name": "name", "autoWidth": true },
             { "data": "description", "name": "description", "autoWidth": true },
-            { "data": "imgUrl", "autoWidth": true }
+            { "data": "imgUrl", "autoWidth": true },
+            { "render": function(data, type, full) {
+
+                    return '<a class="btn btn-info btn-sm" href=#/>' + 'Print' + '</a>';
+                }},
+            { "render": function(data, type, full) {
+
+                    return '<a class="btn btn-info btn-sm download-button" href=#/>' + 'Download' + '</a>';
+                }}
 
         ]
 
     });
 
 
+
+
+
+// show preview image row event
 
     $('#prova tbody').on('click', 'tr', function () {
 
@@ -73,7 +87,7 @@ $(document).ready(function ()
             url:"Material/LoadImage",
             data:{
                 imageName: fileName,
-                
+
             },
             contentType: "image/png",
             success:function(img)
@@ -86,7 +100,59 @@ $(document).ready(function ()
 
     });
 
-});</script>
+// download button event
+    $('#prova tbody').on( 'click', '.download-button', function () {
 
 
+        var fileName = table.row( $(this).parents('tr') ).data().imgUrl;
+        window.location = "/Material/DownloadImage?imageName="+fileName; @*funziona perchè il server su cui è salvato il file è lo stesso che serve le pagine html?*@
+
+
+
+    @*$('.download-button').on('click', function () {
+    $.ajax({
+        url: "/Material/DownloadImage/",
+        data:{
+                imageName: fileName,
+
+            },
+        method: 'GET',
+        @*xhrFields: {
+            responseType: 'text'
+        },
+        success: function (data) {
+            var a = document.createElement('a');
+
+        var binaryData = [];
+        binaryData.push(data);
+        var url = window.URL.createObjectURL(new Blob(binaryData, {type: "image/jpg"}))
+
+            a.href = url;
+            a.download = 'myfile.jpg';
+            a.click();
+            window.URL.revokeObjectURL(url);
+         }
+            });
+        });*@
+
+
+
+
+    } );
+
+
+
+
+
+
+
+
+
+
+});
+
+
+
+
+</script>
 
