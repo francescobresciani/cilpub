@@ -102,6 +102,23 @@ namespace Miv.Controllers
 
         }
 
+
+        [HttpPost]
+        public IActionResult Search(string searchData)
+        {
+
+            var materialData = (from material in _context.Materials
+                                select material);
+
+
+            var Results = materialData.Where(m => (m.MaterialID).ToString().Contains(searchData));
+            
+                return Json(Results);
+            
+        }
+
+
+
         //LoadData2
         [HttpPost]
         public IActionResult LoadData2()
@@ -120,7 +137,7 @@ namespace Miv.Controllers
             //var materialChildren = (from material in _context.ParentChild
             //               select material.ParentID==parMaterialId);
 
-            var materialChildren = _context.Materials.Where(m => m.Parents.Any(p => p.ParentID == parMaterialId));
+            var materialChildren = _context.Materials.Where(m => m.Parents.Any(p => p.ParentID.Equals(parMaterialId)));
 
             //var materialChildren = _context.ParentChild.Where(p => p.ParentID == parMaterialId).Select(p => p.)
             //Returning Json Data  

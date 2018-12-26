@@ -2,29 +2,45 @@
     Layout = null;
 }
 <head>
-    <!-- scripts and style sheets-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet" />
-    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js "></script>
-
-    @*Loading Datatables to the page*@
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/material.css" rel="stylesheet" />
-    <link href="~/datatables/datatables.css" rel="stylesheet" />
+
     <title>CadViewer</title>
 
 </head>
 
-<div class="title dt-responsive">Viewer</div>
 
-<div class="table-div">
-    <br />
-    <div style="width:90%; margin:0 auto;">
+<div class="row">
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top shadow-sm bg-white">
+        <a href="/" class="navbar-brand">
+            <img src="~/images/logo.svg" alt="Mikron" style="width:100px;height:20px;border:0;">
+        </a>
+
+        <div id="navbarSupportedContent" class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li>
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="  search-query form-control" placeholder="Search" id="myInputTextField" />
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div class="row">
+
+    <div class="table-div col-sm-8">
         <table id="prova" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
             <thead>
                 <tr>
+                    @*<th>Root</th>
+                        <th>Number</th>
+                        <th>Parent</th>*@
+                    <th> </th>
                     <th>MaterialID</th>
                     <th>Name</th>
                     <th>Description</th>
@@ -33,68 +49,89 @@
             <tbody></tbody>
         </table>
     </div>
+
+    <div id="view-image" class="view-image col-sm-8 shadow-sm bg-white"></div>
+
 </div>
 
-<div id="view-image" class="view-image"></div>
+<footer class="page-footer font-small blue navbar fixed-bottom">
+
+    <div class="footer-copyright text-left py-2">
+        © 2018 Copyright:
+        <a target="_blank" rel="noopener noreferrer" href="https://mikron.com/"> Mikron Group</a>
+        Developed by:
+        <a target="_blank" rel="noopener noreferrer" href="http://www.supsi.ch/dti/bachelor/ingegneria-informatica.html"> Bresciani / Moreira Group</a>
+    </div>
+
+</footer>
+
+
+<!-- scripts and style sheets-->
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
 
 <script>
     $(document).ready(function () {
-      /*  const diva = document.getElementById("view-image");
-        const img = document.createElement("IMG");
 
+        let buttonIndex = 0;
 
-        function showImageAndChildren(url, target) {
-            showImage(url, target);
-            //  showChildren();
-        }
-
-        function showImage(url, target) {
-            img.src = url;
-            target.appendChild(img);
-            img.setAttribute("style", "width:100%");
-            img.setAttribute("style", "height:100%");
-            target.autoWidth;
-        }
-        */
-
-        var table = $('#prova').DataTable();
-
-     /*   table.row.add([
-            "100","Luciano","Hello World"
-        ]).draw();
-        */
-
-
-         $.ajax({
-            url: "/Material/LoadData2",
-            type: "POST",
-            dataType: "JSON",
-            success: function (result) {
-                result.forEach(function (element) {
-                    table.row.add(
-                        [String(element.materialID), String(element.name), String(element.description)]
-                    ).draw();
-                    //console.log(element);
-                });
-            },
-
+        var table = $('#prova').DataTable({
+            "paging": true,
+            "ordering": true,
+            "searching": false,
+            "dom": 't',
+            "columnDefs": [{
+                "width": "1%", "targets": 0,
+                "targets": 0,
+                "data": null,
+                "defaultContent": "<button class=\"expandable\"></button> "
+            }]
         });
 
-        $('tbody').on('click', 'tr', function () {
-           
-            let riga = table.row(this);
+        // show data on search
+        $('#myInputTextField').on('change keyup copy paste cut', function () {
+            //table.search(this.value).draw();
+            let search = this.value;
+            table.clear().draw();
 
-            let currentParentId = riga.data()[0];
+            $.ajax({
+                url: "/Material/Search",
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                    searchData: search,
+                },
+                success: function (result) {
+                    if ($.trim(result)) {
 
-            let index = table.row(this).index();
+                        table.clear();
+                        result.forEach(function (element) {
+                            table.row.add(
+                                [null, String(element.materialID), String(element.name), String(element.description)]
+                            ).draw();
+                        });
 
-            console.log("Hello There!!!   " + index);
+                    } else {
+                        table.clear().draw();
+                    }
+                },
+
+            });
+
+        });
+        /*
+                $('#example tbody').on('click', 'button', function () {
+                    var data = table.row($(this).parents('tr')).data();
+                    alert(data[0] + "'s salary is: " + data[5]);
+                });
+                */
 
 
-
-//            $("#prova tbody tr").eq(index).after(newRow); 
-
-
+        function insertChild(currentParentId, index) {
             $.ajax({
 
                 url: "/Material/LoadChild",
@@ -106,19 +143,20 @@
                 success: function (result) {
                     console.log(result);
                     result.forEach(function (element) {
+                        table.row.add(
+                            [null, String(element.materialID), String(element.name), String(element.description)]
+                        ).draw();
 
-                        var newRow = '<tr>' +
-                            '<td>' + element.materialID + '</td> ' +
-                            '<td>' + element.name + '</td>' +
-                            '<td>' + element.description + '</td>' +
-                            '</tr>';
+                        let justInsertedIndex = (table.data().length) - 1;
+                        let justInserted = table.row(justInsertedIndex).data()
+                        let tempRow;
 
-                        $("#prova tbody tr").eq(index).after(newRow); 
+                        for (var i = justInsertedIndex; i > (index + 1); i--) {
+                            tempRow = table.row(i - 1).data();
+                            table.row(i).data(tempRow);
+                            table.row(i - 1).data(justInserted);
+                        }
 
-/*                        table.row.add(
-                            [element.materialID, element.name, element.description]
-                        ).draw();*/
-                       // console.log(element);
                     });
                 },
                 error: function () {
@@ -126,47 +164,81 @@
                 }
 
             });
-            
+        }
+
+        function killChild(currentParentId, index) {
+            if()
+        }
+
+        $('#prova tbody').on('click', 'button', function () {
+
+            //            this.text = 'testing';
+            /*
+            this.enabled = false;
+            table.draw();
+
+            alert(this.enabled);
+
+            if ($('button').hasClass('disabled')) {
+                alert('I m disabled');
+            }
+
+*/
+            if (this.classList.contains('expandable')) {
+                this.textContent = "";
+
+                this.classList.remove('expandable');
+                this.classList.toggle('expanded');
+
+
+                let currentParentId = table.row($(this).parents('tr')).data()[1];
+                let index = table.row($(this).parents('tr')).index();
+
+
+                console.log("Hello There!!!   " + index + "currentParentId" + currentParentId);
+
+                insertChild(currentParentId, index);
+
+            } else {
+                this.textContent = "";
+
+                this.classList.remove('expanded');
+                this.classList.toggle('expandable');
+                killChild(currentParentId, index);
+            }
+
         });
 
+        /*        $('#prova').DataTable({
+                    retrieve: true,
 
-/*        $('#prova').DataTable({
-            retrieve: true,
+                    "ajax": {
+                        "url": "Material/InitialData",
+                        "type": "POST",
+                        "datatype": "json"
+                    },
+                    data: {
+                        varCode: 4,
+                    },
 
-            "ajax": {
-                "url": "Material/InitialData",
-                "type": "POST",
-                "datatype": "json"
-            },
-            data: {
-                varCode: 4,
-            },
-                      
-/*            success: function (result) {
-                table.row.add(result).draw();
+        /*            success: function (result) {
+                        table.row.add(result).draw();
 
-                /*result.forEach(function (element) {
-                    table.row.add({
-                        "materialID": element.materialID,
-                        "name": element.name,
-                        "description": element.description
-                    });
-                    console.log(element);
+                        /*result.forEach(function (element) {
+                            table.row.add({
+                                "materialID": element.materialID,
+                                "name": element.name,
+                                "description": element.description
+                            });
+                            console.log(element);
+                        });
+                        console.log(result);
+                    },
+                    error: function () {
+                        $("#table-div").empty();
+                    }
+
                 });
-                console.log(result);
-            },
-            error: function () {
-                $("#table-div").empty();
-            }
-            
-        });*/
-
-        /*
-
-
-
-
-
 
         $('#prova').DataTable({
             "processing": true, // for show progress bar
@@ -185,11 +257,11 @@
                 { "data": "description", "name": "description", "autoWidth": true }
                 //   { "data": "imgUrl", "autoWidth": true }
                 //   { "data": "children", "name":"children"}
-                
+
             ]
 
         });
-        
+
         setTimeout(() => {
             $.ajax({
 
@@ -203,25 +275,25 @@
 
                     table.rows.add(result).draw();
                     console.log(result);
-                                        result.forEach(function (element) {
-                                            table.row.add({
-                                                "materialID": element.materialID,
-                                                "name": element.name,
-                                                "description": element.description
-                                            });
-                                            console.log(element);
-                                        });
+                    result.forEach(function (element) {
+                        table.row.add({
+                            "materialID": element.materialID,
+                            "name": element.name,
+                            "description": element.description
+                        });
+                        console.log(element);
+                    });
                 },
                 error: function () {
                     $("#table-div").empty();
                 }
 
             });
-        },1000
+        }, 1000
 
 
         );
-        
+
 
         $('tbody').on('click', 'tr', function () {
 
@@ -255,26 +327,26 @@
                     $("#table-div").empty();
                 }
 
-            });*/
-
-        //    table.draw();
-
-/*            table.row.add({
-                "materialID": 55,
-                "name": "nameTest",
-                "description": "DescriptionTest"
             });
-*/
-/*            if (riga.child.isShown()) {
-                // This row is already open - close it
-                riga.child.hide();
-            }
-            else {
-                // Open this row
-//                riga.child(tabella).show();
-            }
-            */
 
-      //  });
+            //    table.draw();
+
+            /*            table.row.add({
+                            "materialID": 55,
+                            "name": "nameTest",
+                            "description": "DescriptionTest"
+                        });
+            */
+        /*            if (riga.child.isShown()) {
+                        // This row is already open - close it
+                        riga.child.hide();
+                    }
+                    else {
+                        // Open this row
+        //                riga.child(tabella).show();
+                    }
+                    */
+
+        //  });
 
     });</script>
