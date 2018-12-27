@@ -26,6 +26,9 @@
                         </div>
                     </div>
                 </li>
+                <li>
+                    <button id="mySoapButton" type="button">SOAP</button>
+                </li>
             </ul>
         </div>
     </nav>
@@ -54,6 +57,8 @@
 
 </div>
 
+
+
 <footer class="page-footer font-small blue navbar fixed-bottom">
 
     <div class="footer-copyright text-left py-2">
@@ -76,6 +81,27 @@
 
 <script>
     $(document).ready(function () {
+
+        // show data on search
+        $('#mySoapButton').on('click', function () {
+
+            var search = $('#myInputTextField').val();
+            console.log(search);
+
+            $.ajax({
+                url: "/Material/InvokeSoap",
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                   param1: search,
+                },
+                success: function (result) {
+                    console.log(result);
+                },
+
+            });
+
+        });
 
         let buttonIndex = 0;
 

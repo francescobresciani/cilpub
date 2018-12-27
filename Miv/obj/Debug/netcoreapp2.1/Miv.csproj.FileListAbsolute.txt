@@ -83,6 +83,7 @@
 /Users/frab/Projects/cilpub/Miv/obj/Debug/netcoreapp2.1/Miv.Views.pdb
 /Users/frab/Projects/cilpub/Miv/obj/Debug/netcoreapp2.1/Miv.csproj.CopyComplete
 /Users/frab/Projects/cilpub/Miv/obj/Debug/netcoreapp2.1/Razor/Views/Material/ShowGrid.g.cshtml.cs
+C:\Users\User\source\repos\cilpub\Miv\obj\Debug\netcoreapp2.1\Miv.csprojAssemblyReference.cache
 C:\Users\User\source\repos\cilpub\Miv\bin\Debug\netcoreapp2.1\Miv.deps.json
 C:\Users\User\source\repos\cilpub\Miv\bin\Debug\netcoreapp2.1\Miv.runtimeconfig.json
 C:\Users\User\source\repos\cilpub\Miv\bin\Debug\netcoreapp2.1\Miv.runtimeconfig.dev.json
@@ -120,4 +121,3 @@ C:\Users\User\source\repos\cilpub\Miv\obj\Debug\netcoreapp2.1\Miv.Views.pdb
 C:\Users\User\source\repos\cilpub\Miv\obj\Debug\netcoreapp2.1\Miv.dll
 C:\Users\User\source\repos\cilpub\Miv\obj\Debug\netcoreapp2.1\Miv.pdb
 C:\Users\User\source\repos\cilpub\Miv\obj\Debug\netcoreapp2.1\Miv.csproj.CopyComplete
-C:\Users\User\source\repos\cilpub\Miv\obj\Debug\netcoreapp2.1\Miv.csprojAssemblyReference.cache

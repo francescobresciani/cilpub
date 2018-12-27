@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Miv.Data;
 using Miv.Models;
-
+using ServiceReferenceCountry;
 
 
 namespace Miv.Controllers
@@ -24,12 +28,13 @@ namespace Miv.Controllers
         // GET: Material
         public IActionResult ShowGrid()
         {
-          return View();
+            return View();
         }
 
 
         // DELETE: Material 
-        public void Delete(int id){
+        public void Delete(int id)
+        {
             Console.Out.Write("deleted" + id);
         }
 
@@ -84,7 +89,7 @@ namespace Miv.Controllers
                 //Search  
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    materialData = materialData.Where(m => (m.MaterialID).ToString().Contains(searchValue)|| m.Name.Contains(searchValue));
+                    materialData = materialData.Where(m => (m.MaterialID).ToString().Contains(searchValue) || m.Name.Contains(searchValue));
                 }
 
                 //total number of rows counts   
@@ -112,9 +117,9 @@ namespace Miv.Controllers
 
 
             var Results = materialData.Where(m => (m.MaterialID).ToString().Contains(searchData));
-            
-                return Json(Results);
-            
+
+            return Json(Results);
+
         }
 
 
@@ -124,7 +129,7 @@ namespace Miv.Controllers
         public IActionResult LoadData2()
         {
             var VarMaterial = (from material in _context.Materials
-                            select material);
+                               select material);
 
             return Json(VarMaterial);
         }
@@ -145,7 +150,81 @@ namespace Miv.Controllers
 
         }
 
+        [HttpPost]
+        public HttpWebRequest soapRequest01()
+        {
+            //fa la Web Request
+            HttpWebRequest Req = (HttpWebRequest)WebRequest.Create(@"http://www.dataaccess.com/webservicesserver/numberconversion.wso");
+            //SOP Action
+            Req.Headers.Add(@"SOAPAction:");
+            //Content Type
+            Req.ContentType = "text/xml;charset=\"utf-8\"";
+            Req.Accept = "text/xml";
+            //HTTP Method
+            Req.Method = "POST";
+            //return HttpWebRequest
+            return Req;
+        }
 
+        public IActionResult InvokeSoap(int param1)
+        {
+            //Calling il metodo SOAP Request 1
+            HttpWebRequest request = soapRequest01();
+
+            //SOAP Body Request
+            XmlDocument SOAPReqBody = new XmlDocument();
+            SOAPReqBody.LoadXml(@"<?xml version=""1.0"" encoding=""utf-8""?>
+            <soap:Envelope xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:web=""http://www.dataaccess.com/webservicesserver/"">
+                <soap:Body>
+                    <web:NumberToDollars>
+                        <web:dNum>"+param1+@"</web:dNum>
+                    </web:NumberToDollars>
+                </soap:Body>
+            </soap:Envelope>");
+
+            using (Stream stream = request.GetRequestStream())
+            {
+                SOAPReqBody.Save(stream);
+            }
+
+            using (WebResponse Service = request.GetResponse())
+            {
+                using(StreamReader reader = new StreamReader(Service.GetResponseStream()))
+                {
+                    var ServiceResult = reader.ReadToEnd();
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(ServiceResult);
+                    
+                    return Json(doc);
+                }
+            }
+
+            //Getting response from request
+            /*           using (WebResponse Serviceres = request.GetResponse())
+                       {
+                           using (StreamReader rd = new StreamReader(Serviceres.GetResponseStream()))
+                           {
+                               //reading stream    
+                               var ServiceResult = rd.ReadToEnd();
+                               XmlDocument doc = new XmlDocument();
+                               doc.LoadXml(ServiceResult);
+
+                               List<string> arrayResult = new List<string>();
+
+                               foreach (XmlNode no in doc )
+                               {
+                                   arrayResult.Add(no.Attributes["m:NumberToDollarsResult"].Value);
+                               }
+
+
+                               //writting stream result on console    
+                               return Json(arrayResult);
+
+               }
+
+           }*/
+
+        }
 
     }
 }
