@@ -165,9 +165,44 @@
 
             });
         }
-
+        
         function killChild(currentParentId, index) {
-            if()
+                $.ajax({
+
+                    url: "/Material/LoadChild",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        parMaterialId: currentParentId,
+                    },
+                    success: function (result) {
+                        console.log(result.length);
+                        for (var i = 0; i < result.length; i++){
+                            table.row(index+1).remove().draw();
+
+            }
+                       /* result.forEach(function (element) {
+                            table.row.add(
+                                [null, String(element.materialID), String(element.name), String(element.description)]
+                            ).draw();
+
+                            let justInsertedIndex = (table.data().length) - 1;
+                            let justInserted = table.row(justInsertedIndex).data()
+                            let tempRow;
+
+                            for (var i = justInsertedIndex; i > (index + 1); i--) {
+                                tempRow = table.row(i - 1).data();
+                                table.row(i).data(tempRow);
+                                table.row(i - 1).data(justInserted);
+                            }
+
+                        });*/
+                    },
+                    error: function () {
+                        console.log("error con LoadChildAjax");
+                    }
+
+                });
         }
 
         $('#prova tbody').on('click', 'button', function () {
@@ -184,16 +219,15 @@
             }
 
 */
+
+            let currentParentId = table.row($(this).parents('tr')).data()[1];
+            let index = table.row($(this).parents('tr')).index();
+
             if (this.classList.contains('expandable')) {
                 this.textContent = "";
 
                 this.classList.remove('expandable');
                 this.classList.toggle('expanded');
-
-
-                let currentParentId = table.row($(this).parents('tr')).data()[1];
-                let index = table.row($(this).parents('tr')).index();
-
 
                 console.log("Hello There!!!   " + index + "currentParentId" + currentParentId);
 
