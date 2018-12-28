@@ -155,7 +155,7 @@ namespace Miv.Controllers
         {
             //fa la Web Request
             HttpWebRequest Req = (HttpWebRequest)WebRequest.Create(@"http://www.dataaccess.com/webservicesserver/numberconversion.wso");
-            //SOP Action
+            //SOAP Action
             Req.Headers.Add(@"SOAPAction:");
             //Content Type
             Req.ContentType = "text/xml;charset=\"utf-8\"";
@@ -165,6 +165,13 @@ namespace Miv.Controllers
             //return HttpWebRequest
             return Req;
         }
+
+
+        static XName nameSpace(string name)
+        {
+            return XNamespace.Get("http://www.dataaccess.com/webservicesserver/") + name;
+        }
+
 
         public IActionResult InvokeSoap(int param1)
         {
@@ -187,42 +194,25 @@ namespace Miv.Controllers
                 SOAPReqBody.Save(stream);
             }
 
+            List<string> lista = new List<string>(); 
+
             using (WebResponse Service = request.GetResponse())
             {
                 using(StreamReader reader = new StreamReader(Service.GetResponseStream()))
                 {
                     var ServiceResult = reader.ReadToEnd();
-                    XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(ServiceResult);
+                    XDocument doc = XDocument.Parse(ServiceResult.ToString()) ;
+
+
+
+                    foreach (XElement item in doc.Descendants(nameSpace("NumberToDollarsResult")))
+                    {
+                        lista.Add(item.Value) ;
+                    }
                     
-                    return Json(doc);
+                    return Json(lista);
                 }
             }
-
-            //Getting response from request
-            /*           using (WebResponse Serviceres = request.GetResponse())
-                       {
-                           using (StreamReader rd = new StreamReader(Serviceres.GetResponseStream()))
-                           {
-                               //reading stream    
-                               var ServiceResult = rd.ReadToEnd();
-                               XmlDocument doc = new XmlDocument();
-                               doc.LoadXml(ServiceResult);
-
-                               List<string> arrayResult = new List<string>();
-
-                               foreach (XmlNode no in doc )
-                               {
-                                   arrayResult.Add(no.Attributes["m:NumberToDollarsResult"].Value);
-                               }
-
-
-                               //writting stream result on console    
-                               return Json(arrayResult);
-
-               }
-
-           }*/
 
         }
 

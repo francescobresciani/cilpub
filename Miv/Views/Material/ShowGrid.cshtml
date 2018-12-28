@@ -149,13 +149,6 @@
             });
 
         });
-        /*
-                $('#example tbody').on('click', 'button', function () {
-                    var data = table.row($(this).parents('tr')).data();
-                    alert(data[0] + "'s salary is: " + data[5]);
-                });
-                */
-
 
         function insertChild(currentParentId, index) {
             $.ajax({
@@ -182,7 +175,7 @@
                             table.row(i).data(tempRow);
                             table.row(i - 1).data(justInserted);
                         }
-
+                        
                     });
                 },
                 error: function () {
