@@ -44,9 +44,10 @@
                         <th>Number</th>
                         <th>Parent</th>*@
                     <th> </th>
-                    <th>MaterialID</th>
-                    <th>Name</th>
-                    <th>Description</th>
+                    <th>materialID</th>
+                    <th>name</th>
+                    <th>description</th>
+                    <th>imgUrl</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -92,9 +93,6 @@
                 url: "/Material/InvokeSoap",
                 type: "POST",
                 dataType: "JSON",
-                data: {
-                   param1: search,
-                },
                 success: function (result) {
                     console.log(result);
                 },
@@ -115,17 +113,18 @@
                 "targets": 0,
                 "data": null,
                 "defaultContent": "<button class=\"expandable\"></button> "
-            }]
+            }],
         });
 
-        // show data on search
+
+        //// show data on search
         $('#myInputTextField').on('change keyup copy paste cut', function () {
             //table.search(this.value).draw();
             let search = this.value;
             table.clear().draw();
 
             $.ajax({
-                url: "/Material/Search",
+                url: "/Material/SoapSearch",
                 type: "POST",
                 dataType: "JSON",
                 data: {
@@ -137,7 +136,7 @@
                         table.clear();
                         result.forEach(function (element) {
                             table.row.add(
-                                [null, String(element.materialID), String(element.name), String(element.description)]
+                                [null, String(element.materialID), String(element.name), String(element.description), String(element.imrUrl)]
                             ).draw();
                         });
 
@@ -153,7 +152,7 @@
         function insertChild(currentParentId, index) {
             $.ajax({
 
-                url: "/Material/LoadChild",
+                url: "/Material/SoapLoadChild",
                 type: "POST",
                 dataType: "JSON",
                 data: {
@@ -163,7 +162,7 @@
                     console.log(result);
                     result.forEach(function (element) {
                         table.row.add(
-                            [null, String(element.materialID), String(element.name), String(element.description)]
+                            [null, String(element.materialID), String(element.name), String(element.description), String(element.imrUrl)]
                         ).draw();
 
                         let justInsertedIndex = (table.data().length) - 1;
@@ -188,7 +187,7 @@
         function killChild(currentParentId, index) {
                 $.ajax({
 
-                    url: "/Material/LoadChild",
+                    url: "/Material/SoapLoadChild",
                     type: "POST",
                     dataType: "JSON",
                     data: {

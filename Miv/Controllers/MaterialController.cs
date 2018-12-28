@@ -122,8 +122,6 @@ namespace Miv.Controllers
 
         }
 
-
-
         //LoadData2
         [HttpPost]
         public IActionResult LoadData2()
@@ -154,7 +152,7 @@ namespace Miv.Controllers
         public HttpWebRequest soapRequest01()
         {
             //fa la Web Request
-            HttpWebRequest Req = (HttpWebRequest)WebRequest.Create(@"http://www.dataaccess.com/webservicesserver/numberconversion.wso");
+            HttpWebRequest Req = (HttpWebRequest)WebRequest.Create(@"http://localhost:8080/ws");
             //SOAP Action
             Req.Headers.Add(@"SOAPAction:");
             //Content Type
@@ -169,11 +167,11 @@ namespace Miv.Controllers
 
         static XName nameSpace(string name)
         {
-            return XNamespace.Get("http://www.dataaccess.com/webservicesserver/") + name;
+            return XNamespace.Get("http://miv.materials.com") + name;
         }
 
-
-        public IActionResult InvokeSoap(int param1)
+        [HttpPost]
+        public IActionResult InvokeSoap()
         {
             //Calling il metodo SOAP Request 1
             HttpWebRequest request = soapRequest01();
@@ -181,33 +179,32 @@ namespace Miv.Controllers
             //SOAP Body Request
             XmlDocument SOAPReqBody = new XmlDocument();
             SOAPReqBody.LoadXml(@"<?xml version=""1.0"" encoding=""utf-8""?>
-            <soap:Envelope xmlns:soap=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:web=""http://www.dataaccess.com/webservicesserver/"">
-                <soap:Body>
-                    <web:NumberToDollars>
-                        <web:dNum>"+param1+@"</web:dNum>
-                    </web:NumberToDollars>
-                </soap:Body>
-            </soap:Envelope>");
+            <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:miv=""http://miv.materials.com"">
+            <soapenv:Header/>                
+                <soapenv:Body>
+                    <miv:GetMaterialsRequest></miv:GetMaterialsRequest>
+                </soapenv:Body>
+            </soapenv:Envelope>");
 
             using (Stream stream = request.GetRequestStream())
             {
                 SOAPReqBody.Save(stream);
             }
 
-            List<string> lista = new List<string>(); 
+            List<Element> lista = new List<Element>(); 
 
             using (WebResponse Service = request.GetResponse())
             {
                 using(StreamReader reader = new StreamReader(Service.GetResponseStream()))
                 {
                     var ServiceResult = reader.ReadToEnd();
+
                     XDocument doc = XDocument.Parse(ServiceResult.ToString()) ;
 
-
-
-                    foreach (XElement item in doc.Descendants(nameSpace("NumberToDollarsResult")))
+                    foreach (XElement item in doc.Descendants(nameSpace("MaterialList")))
                     {
-                        lista.Add(item.Value) ;
+                        lista.Add(new Element(Int32.Parse(item.Element(nameSpace("id")).Value), item.Element(nameSpace("name")).Value,
+                            item.Element(nameSpace("description")).Value, item.Element(nameSpace("imgUrl")).Value));
                     }
                     
                     return Json(lista);
@@ -215,6 +212,97 @@ namespace Miv.Controllers
             }
 
         }
+
+        [HttpPost]
+        public IActionResult SoapSearch(int searchData)
+        {
+            //Calling il metodo SOAP Request 1
+            HttpWebRequest request = soapRequest01();
+
+            //SOAP Body Request
+            XmlDocument SOAPReqBody = new XmlDocument();
+            SOAPReqBody.LoadXml(@"<?xml version=""1.0"" encoding=""utf-8""?>
+            <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:miv=""http://miv.materials.com"">
+            <soapenv:Header/>                
+                <soapenv:Body>
+                    <miv:GetMaterialsByIDRequest>
+                        <miv:partial-id>"+searchData+@"</miv:partial-id>
+                    </miv:GetMaterialsByIDRequest>
+                </soapenv:Body>
+            </soapenv:Envelope>");
+
+            using (Stream stream = request.GetRequestStream())
+            {
+                SOAPReqBody.Save(stream);
+            }
+
+            List<Element> lista = new List<Element>();
+
+            using (WebResponse Service = request.GetResponse())
+            {
+                using (StreamReader reader = new StreamReader(Service.GetResponseStream()))
+                {
+                    var ServiceResult = reader.ReadToEnd();
+
+                    XDocument doc = XDocument.Parse(ServiceResult.ToString());
+
+                    foreach (XElement item in doc.Descendants(nameSpace("Material")))
+                    {
+                        lista.Add(new Element(Int32.Parse(item.Element(nameSpace("id")).Value), item.Element(nameSpace("name")).Value,
+                            item.Element(nameSpace("description")).Value, item.Element(nameSpace("imgUrl")).Value));
+                    }
+
+                    return Json(lista);
+                }
+            }
+
+        }
+
+
+        [HttpPost]
+        public IActionResult SoapLoadChild(int parMaterialId)
+        {
+            //Calling il metodo SOAP Request 1
+            HttpWebRequest request = soapRequest01();
+
+            //SOAP Body Request
+            XmlDocument SOAPReqBody = new XmlDocument();
+            SOAPReqBody.LoadXml(@"<?xml version=""1.0"" encoding=""utf-8""?>
+            <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:miv=""http://miv.materials.com"">
+            <soapenv:Header/>                
+                <soapenv:Body>
+                    <miv:GetMaterialsByParentIDRequest>
+                        <miv:parent-id>"+ parMaterialId + @"</miv:parent-id>
+                    </miv:GetMaterialsByParentIDRequest>                </soapenv:Body>
+            </soapenv:Envelope>");
+
+            using (Stream stream = request.GetRequestStream())
+            {
+                SOAPReqBody.Save(stream);
+            }
+
+            List<Element> lista = new List<Element>();
+
+            using (WebResponse Service = request.GetResponse())
+            {
+                using (StreamReader reader = new StreamReader(Service.GetResponseStream()))
+                {
+                    var ServiceResult = reader.ReadToEnd();
+
+                    XDocument doc = XDocument.Parse(ServiceResult.ToString());
+
+                    foreach (XElement item in doc.Descendants(nameSpace("Material")))
+                    {
+                        lista.Add(new Element(Int32.Parse(item.Element(nameSpace("id")).Value), item.Element(nameSpace("name")).Value,
+                            item.Element(nameSpace("description")).Value, item.Element(nameSpace("imgUrl")).Value));
+                    }
+
+                    return Json(lista);
+                }
+            }
+
+        }
+
 
     }
 }
