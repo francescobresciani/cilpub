@@ -284,4 +284,12 @@
             });
         });
 
+        // download button event
+        $('#prova tbody').on('click', '.download-button', function () {
+            var fileName = table.row($(this).parents('tr')).data()[4];
+            window.location = "/Material/DownloadImage?imageName=" + fileName;
+    });
+
+
+
     });</script>

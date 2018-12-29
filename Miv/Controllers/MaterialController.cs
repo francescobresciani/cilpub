@@ -213,6 +213,17 @@ namespace Miv.Controllers
 
             return imgDataURL;
         }
+
+        public ActionResult DownloadImage(String imageName)
+        {
+            String path = "wwwroot/images/" + imageName;
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+
+            //il file salvato non è leggibile. controllare codifica
+
+            return File(fileBytes, "image/jpg", imageName);
+
+        }
     }
 }
 
