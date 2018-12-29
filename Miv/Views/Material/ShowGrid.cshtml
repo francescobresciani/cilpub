@@ -136,7 +136,7 @@
                         table.clear();
                         result.forEach(function (element) {
                             table.row.add(
-                                [null, String(element.materialID), String(element.name), String(element.description), String(element.imrUrl)]
+                                [null, String(element.materialID), String(element.name), String(element.description), String(element.imgUrl)]
                             ).draw();
                         });
 
@@ -162,7 +162,7 @@
                     console.log(result);
                     result.forEach(function (element) {
                         table.row.add(
-                            [null, String(element.materialID), String(element.name), String(element.description), String(element.imrUrl)]
+                            [null, String(element.materialID), String(element.name), String(element.description), String(element.imgUrl)]
                         ).draw();
 
                         let justInsertedIndex = (table.data().length) - 1;

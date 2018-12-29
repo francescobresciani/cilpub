@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Miv.Data;
 using Miv.Models;
-using ServiceReferenceCountry;
 
 
 namespace Miv.Controllers
@@ -273,7 +272,8 @@ namespace Miv.Controllers
                 <soapenv:Body>
                     <miv:GetMaterialsByParentIDRequest>
                         <miv:parent-id>"+ parMaterialId + @"</miv:parent-id>
-                    </miv:GetMaterialsByParentIDRequest>                </soapenv:Body>
+                    </miv:GetMaterialsByParentIDRequest>
+                </soapenv:Body>
             </soapenv:Envelope>");
 
             using (Stream stream = request.GetRequestStream())
