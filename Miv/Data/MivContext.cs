@@ -1,6 +1,7 @@
 ﻿using System;
 using Miv.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Miv.Data
 {
@@ -28,6 +29,7 @@ namespace Miv.Data
         }
 
 
+        
         public DbSet<Material> Materials { get; set; }
         public DbSet<ParentChild> ParentChild { get; set; }
 

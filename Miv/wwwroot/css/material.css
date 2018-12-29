@@ -41,3 +41,8 @@ body {
     font-size: 100pt;
     background-color: red !important;
 }
+
+.view-image {
+    min-height: 100%;
+    height: 100%;
+}
