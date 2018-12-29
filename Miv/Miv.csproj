@@ -5,9 +5,37 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Connected Services\ServiceReferenceCountry\**" />
+    <Compile Remove="Views\Home\**" />
     <Content Remove="Connected Services\ServiceReferenceCountry\**" />
+    <Content Remove="Views\Home\**" />
     <EmbeddedResource Remove="Connected Services\ServiceReferenceCountry\**" />
+    <EmbeddedResource Remove="Views\Home\**" />
     <None Remove="Connected Services\ServiceReferenceCountry\**" />
+    <None Remove="Views\Home\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\HomeController.cs" />
+    <Compile Remove="Data\DbInitializer.cs" />
+    <Compile Remove="Data\MivContext.cs" />
+    <Compile Remove="ImageResult.cs" />
+    <Compile Remove="Migrations\20181028153527_InitialMigration.cs" />
+    <Compile Remove="Migrations\20181028153527_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20181028154405_InitialMigration2.cs" />
+    <Compile Remove="Migrations\20181028154405_InitialMigration2.Designer.cs" />
+    <Compile Remove="Migrations\MivContextModelSnapshot.cs" />
+    <Compile Remove="Models\Material.cs" />
+    <Compile Remove="Models\ParentChild.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Material\Create.cshtml" />
+    <Content Remove="Views\Material\Delete.cshtml" />
+    <Content Remove="Views\Material\Details.cshtml" />
+    <Content Remove="Views\Material\Edit.cshtml" />
+    <Content Remove="Views\Material\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="MivContext.db" />
+    <None Remove="_MivContext.db" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />
@@ -24,5 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Connected Services\" />
+    <Folder Include="Data\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>
